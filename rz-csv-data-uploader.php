@@ -14,7 +14,7 @@
 defined('ABSPATH') || exit;
 
 // Include files
-require_once( plugin_dir_path(__FILE__) . "include/cdu_form.php" );
+//require_once( plugin_dir_path(__FILE__) . "include/cdu_form.php" );
 
 class Rz_csv_data_uploader {
     function __construct(){
@@ -22,9 +22,20 @@ class Rz_csv_data_uploader {
     }
 
     function rz_display_uploader_form() {
-        return "<h3>CSV DATA UPLOADER</h3>";
+        ob_start(); // Start buffer
+        include( plugin_dir_path(__FILE__) . "include/cdu_form.php" );
+        return ob_get_clean(); // Get buffer + clean
     }
 
+    public static function cdu_create_table() {
+        
+    }
+
+    
+
 }
+
+// Register activation hook (uses static method)
+register_activation_hook( __FILE__, [ "Rz_csv_data_uploader", "cdu_create_table" ] );
 
 new Rz_csv_data_uploader();
