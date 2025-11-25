@@ -28,14 +28,33 @@ class Rz_csv_data_uploader {
     }
 
     public static function cdu_create_table() {
-        
+        global $wpdb;
+        $table_prefix = $wpdb->prefix; // wp_
+        $table_name = $table_prefix . "students_data"; // wp_students_data
+
+        $table_collate = $wpdb->get_charset_collate();
+
+        $sql_command = "
+            CREATE TABLE `".$table_name."` (
+            `id` int NOT NULL AUTO_INCREMENT,
+            `name` varchar(50) DEFAULT NULL,
+            `email` varchar(50) DEFAULT NULL,
+            `age` int DEFAULT NULL,
+            `phone` varchar(30) DEFAULT NULL,
+            `photo` varchar(120) DEFAULT NULL,
+            PRIMARY KEY (`id`)
+            ) ".$table_collate."
+        ";
+
+        require_once(ABSPATH. "/wp-admin/includes/upgrade.php");
+        dbDelta( $sql_command );
     }
 
     
 
 }
 
-// Register activation hook (uses static method)
+// Register activation hook (uses static method) - DB table on Plugin Activation
 register_activation_hook( __FILE__, [ "Rz_csv_data_uploader", "cdu_create_table" ] );
 
 new Rz_csv_data_uploader();
